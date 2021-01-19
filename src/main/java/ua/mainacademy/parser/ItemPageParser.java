@@ -17,7 +17,7 @@ public class ItemPageParser extends Thread {
 	private String url;
 
 	public static boolean isItemPage(String url) {
-		return url.contains("/product/");
+		return !url.contains("/product/");
 	}
 
 	@Override
@@ -54,13 +54,16 @@ public class ItemPageParser extends Thread {
 		return StringUtils.substringAfterLast(url, "=");
 	}
 
-	private static int extractPrice(Element element) {
-		String priceRow = element.getElementsByClass("discount_price").first().text();
-		return Integer.valueOf(priceRow);
+	private int extractInitPrice(Element element) {
+		List<Element> elementList = element.getElementsByClass("price_num");
+		if (elementList.isEmpty()) {
+			return 0;
+		}
+		return Integer.valueOf(elementList.get(0).text().replaceAll("\\D", ""));
 	}
 
-	private int extractInitPrice(Element element) {
-		List<Element> elementList = element.getElementsByClass("original_price hasDiscount");
+	private static int extractPrice(Element element) {
+		List<Element> elementList = element.getElementsByClass("discount_price");
 		if (elementList.isEmpty()) {
 			return 0;
 		}
@@ -68,9 +71,10 @@ public class ItemPageParser extends Thread {
 	}
 
 	private String extractImageUrl(Element element) {
-		Elements imageElements = element.getElementsByClass(
-				"image_zoom_wrap").first().getElementsByTag("a");
-		String imageUrl = imageElements.attr("abs:href");
+		Elements imageElements = document.select("div.image.zoom.wrap > a");
+		//element.getElementsByClass(
+		//"image_zoom_wrap").first().getElementsByTag("a");
+		String imageUrl = imageElements.attr("href");
 		return imageUrl;
 	}
 

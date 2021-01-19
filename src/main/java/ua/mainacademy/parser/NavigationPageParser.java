@@ -54,8 +54,8 @@ public class NavigationPageParser extends Thread {
 
 	private int extractLastPage(Document document) {
 		Elements resultElements = document.getElementsByClass(
-				"page-link pagination__link js-pagination__link-last js-pagination_link");
-		String result = resultElements.first().text();
+				"pagination__item extra pagination__item_last").first().getElementsByTag("a");
+		String result = resultElements.text();
 		return Integer.valueOf(result);
 	}
 

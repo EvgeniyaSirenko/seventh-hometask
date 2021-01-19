@@ -31,7 +31,6 @@ public class AppRunner {
 		} while (!threadsAreNotActive(threads));
 
 		LOG.info(String.format("Items were extracted. Amount = %d", items.size()));
-		//System.out.println( "Items were extracted. Amount = " + items.size());
 	}
 
 	private static boolean threadsAreNotActive(List<Thread> threads) {
