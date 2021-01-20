@@ -31,6 +31,9 @@ public class AppRunner {
 		} while (!threadsAreNotActive(threads));
 
 		LOG.info(String.format("Items were extracted. Amount = %d", items.size()));
+		for (Item item : items)
+		LOG.info(item.getName() + ": " + item.getPrice() + " грн");
+
 	}
 
 	private static boolean threadsAreNotActive(List<Thread> threads) {
@@ -39,6 +42,6 @@ public class AppRunner {
 				return false;
 			}
 		}
-		return  true;
+		return true;
 	}
 }

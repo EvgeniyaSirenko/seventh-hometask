@@ -27,6 +27,8 @@ public class NavigationPageParser extends Thread {
 		/*
 		TODO: extract item links
 		 */
+		//Elements elements = document.select("div.product_image").first().select("a[href]");
+
 
 		for (String itemLink : itemLinks) {
 			if (threads.size() > 5) {
@@ -55,7 +57,7 @@ public class NavigationPageParser extends Thread {
 	private int extractLastPage(Document document) {
 		Elements resultElements = document.getElementsByClass(
 				"pagination__item extra pagination__item_last").first().getElementsByTag("a");
-		String result = resultElements.text();
+		String result = resultElements.first().text();
 		return Integer.valueOf(result);
 	}
 

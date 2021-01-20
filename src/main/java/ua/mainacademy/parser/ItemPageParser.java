@@ -5,12 +5,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import ua.mainacademy.AppRunner;
 import ua.mainacademy.model.Item;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 @AllArgsConstructor
+
 public class ItemPageParser extends Thread {
 	private List<Item> items;
 	private Document document;
@@ -29,14 +32,12 @@ public class ItemPageParser extends Thread {
 		Element productBlock = document.getElementById("wrapper");
 
 		String name = extractName(productBlock);
-		String code = extractCode(url);
 		int price = extractPrice(productBlock);
 		int initPrice = extractInitPrice(productBlock) == 0 ? price : extractInitPrice(productBlock);
 		String imageUrl = extractImageUrl(productBlock);
 		String group = extractGroup(document);
 
 		return Item.builder()
-				.code(code)
 				.name(name)
 				.price(price)
 				.initPrice(initPrice)
@@ -47,11 +48,7 @@ public class ItemPageParser extends Thread {
 	}
 
 	private String extractName(Element element) {
-		return element.getElementsByTag("h1").first().text();
-	}
-
-	private String extractCode(String url) {
-		return StringUtils.substringAfterLast(url, "=");
+		return element.getElementsByClass("product_name_wrap").first().getElementsByAttribute("title").first().text();
 	}
 
 	private int extractInitPrice(Element element) {
@@ -71,16 +68,17 @@ public class ItemPageParser extends Thread {
 	}
 
 	private String extractImageUrl(Element element) {
-		Elements imageElements = document.select("div.image.zoom.wrap > a");
-		//element.getElementsByClass(
-		//"image_zoom_wrap").first().getElementsByTag("a");
-		String imageUrl = imageElements.attr("href");
+		//Element imageElements = document.select("img").first();
+		Elements img = document.select("div.duct_item img[src]");
+		String imageUrl = img.attr("src");
+		//String imageUrl = imageElements.attr("src");
 		return imageUrl;
 	}
 
 	private String extractGroup(Document document) {
-		Elements groupElements = document.getElementsByClass("breadcrumbs_block")
-				.first().getElementsByTag("a");
+		//String result = "";
+		Elements groupDiv = document.getElementsByClass("breadcrumbs_block");
+		Elements groupElements = groupDiv.first().getElementsByTag("a");
 		List<String> groups = new ArrayList<>();
 		for (Element element : groupElements) {
 			groups.add(element.text());
