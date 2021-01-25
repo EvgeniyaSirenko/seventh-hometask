@@ -20,7 +20,7 @@ public class ItemPageParser extends Thread {
 	private String url;
 
 	public static boolean isItemPage(String url) {
-		return !url.contains("/product/");
+		return url.contains("/product/");
 	}
 
 	@Override
@@ -34,8 +34,8 @@ public class ItemPageParser extends Thread {
 		String name = extractName(productBlock);
 		int price = extractPrice(productBlock);
 		int initPrice = extractInitPrice(productBlock) == 0 ? price : extractInitPrice(productBlock);
-		String imageUrl = extractImageUrl(productBlock);
-		String group = extractGroup(document);
+		String imageUrl = extractImageUrl();
+		String group = extractGroup();
 
 		return Item.builder()
 				.name(name)
@@ -48,7 +48,7 @@ public class ItemPageParser extends Thread {
 	}
 
 	private String extractName(Element element) {
-		return element.getElementsByClass("product_name_wrap").first().getElementsByAttribute("title").first().text();
+		return element.getElementsByTag("h1").first().text();
 	}
 
 	private int extractInitPrice(Element element) {
@@ -56,27 +56,25 @@ public class ItemPageParser extends Thread {
 		if (elementList.isEmpty()) {
 			return 0;
 		}
-		return Integer.valueOf(elementList.get(0).text().replaceAll("\\D", ""));
+		return Integer.parseInt(elementList.get(0).text().replaceAll("\\D", ""));
 	}
 
 	private static int extractPrice(Element element) {
 		List<Element> elementList = element.getElementsByClass("discount_price");
 		if (elementList.isEmpty()) {
+			elementList = element.getElementsByClass("price_num");
 			return 0;
 		}
-		return Integer.valueOf(elementList.get(0).text().replaceAll("\\D", ""));
+		return Integer.parseInt(elementList.get(0).text().replaceAll("\\D", ""));
 	}
 
-	private String extractImageUrl(Element element) {
-		//Element imageElements = document.select("img").first();
-		Elements img = document.select("div.duct_item img[src]");
-		String imageUrl = img.attr("src");
-		//String imageUrl = imageElements.attr("src");
-		return imageUrl;
+	private String extractImageUrl() {
+		Elements imageElements = document.getElementsByAttribute("data-image-original");
+		return imageElements.first().absUrl("data-image-original");
+
 	}
 
-	private String extractGroup(Document document) {
-		//String result = "";
+	private String extractGroup() {
 		Elements groupDiv = document.getElementsByClass("breadcrumbs_block");
 		Elements groupElements = groupDiv.first().getElementsByTag("a");
 		List<String> groups = new ArrayList<>();

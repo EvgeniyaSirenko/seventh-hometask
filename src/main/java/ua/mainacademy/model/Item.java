@@ -11,6 +11,7 @@ import lombok.*;
 @ToString
 
 public class Item {
+	private int id;
 	private String name;
 	private String code;
 	private int price;
