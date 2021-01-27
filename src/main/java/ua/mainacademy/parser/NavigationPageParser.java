@@ -26,14 +26,14 @@ public class NavigationPageParser extends Thread {
 	private void parsePage(String url) {
 		//extract item links
 		List<String> itemLinks = new ArrayList<>();
-		Elements elements = document.getElementsByClass("products_wrapper").first().getElementsByClass("product_item");
+		Elements elements = document.getElementsByClass("products_wrapper").first()
+				.getElementsByClass("product_item");
 
 		int counter = 0;
 		for (Element element : elements) {
 			if (counter > 3) {
 				continue;
 			}
-			//change data-url?
 			RouterParser routerParser = new RouterParser(items, threads, element.absUrl("data-url"));
 			threads.add(routerParser);
 			routerParser.start();

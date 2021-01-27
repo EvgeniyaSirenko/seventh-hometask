@@ -13,7 +13,7 @@ import lombok.*;
 public class Item {
 	private int id;
 	private String name;
-	private String code;
+	private int code;
 	private int price;
 	private int initPrice;
 	private String url;

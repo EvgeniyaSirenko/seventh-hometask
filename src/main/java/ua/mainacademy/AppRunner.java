@@ -32,7 +32,7 @@ public class AppRunner {
 
 		LOG.info(String.format("Items were extracted. Amount = %d", items.size()));
 		for (Item item : items)
-		LOG.info(item.getName() + ": " + item.getPrice() + " грн");
+		LOG.info(item.getCode() + " " + item.getName() + ": " + item.getPrice() + " грн");
 
 	}
 

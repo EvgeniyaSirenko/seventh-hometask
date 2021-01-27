@@ -32,6 +32,7 @@ public class ItemPageParser extends Thread {
 		Element productBlock = document.getElementById("wrapper");
 
 		String name = extractName(productBlock);
+		int code = extractCode();
 		int price = extractPrice(productBlock);
 		int initPrice = extractInitPrice(productBlock) == 0 ? price : extractInitPrice(productBlock);
 		String imageUrl = extractImageUrl();
@@ -39,12 +40,18 @@ public class ItemPageParser extends Thread {
 
 		return Item.builder()
 				.name(name)
+				.code(code)
 				.price(price)
 				.initPrice(initPrice)
 				.group(group)
 				.url(url)
 				.imageUrl(imageUrl)
 				.build();
+	}
+
+	private int extractCode() {
+		Elements codes = document.getElementsByClass("sku_article").first().getElementsByClass("skuId");
+		return Integer.parseInt(codes.first().text());
 	}
 
 	private String extractName(Element element) {
@@ -64,6 +71,7 @@ public class ItemPageParser extends Thread {
 		if (elementList.isEmpty()) {
 			elementList = element.getElementsByClass("price_num");
 			return 0;
+					//Integer.parseInt(elementList.get(0).text().replaceAll("\\D", ""));
 		}
 		return Integer.parseInt(elementList.get(0).text().replaceAll("\\D", ""));
 	}
