@@ -33,8 +33,8 @@ public class ItemPageParser extends Thread {
 
 		String name = extractName(productBlock);
 		int code = extractCode();
-		int price = extractPrice(productBlock);
-		int initPrice = extractInitPrice(productBlock) == 0 ? price : extractInitPrice(productBlock);
+		int initPrice = extractInitPrice(productBlock);
+		int price = extractPrice(productBlock) == 0 ? initPrice : extractPrice(productBlock);
 		String imageUrl = extractImageUrl();
 		String group = extractGroup();
 
@@ -69,9 +69,7 @@ public class ItemPageParser extends Thread {
 	private static int extractPrice(Element element) {
 		List<Element> elementList = element.getElementsByClass("discount_price");
 		if (elementList.isEmpty()) {
-			elementList = element.getElementsByClass("price_num");
 			return 0;
-					//Integer.parseInt(elementList.get(0).text().replaceAll("\\D", ""));
 		}
 		return Integer.parseInt(elementList.get(0).text().replaceAll("\\D", ""));
 	}

@@ -17,7 +17,7 @@ public class Item {
 	private int price;
 	private int initPrice;
 	private String url;
-	private  String imageUrl;
+	private String imageUrl;
 	private String group;
 
 }
